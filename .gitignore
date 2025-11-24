@@ -1,0 +1,36 @@
+# ============ .gitignore (in project root) ============
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+myenv/
+venv/
+ENV/
+env/
+.env
+
+# Node
+node_modules/
+dist/
+.npm
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Deployment
+.vercel/
+.render/
+
+# NLTK data (downloaded at runtime)
+nltk_data/
