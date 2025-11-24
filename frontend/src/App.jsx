@@ -48,7 +48,6 @@ function App() {
     setResult(null);
 
     try {
-      // Just read and display the file content, don't analyze yet
       const text = await selectedFile.text();
       setTranscript(text);
     } catch (err) {

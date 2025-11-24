@@ -36,7 +36,6 @@ class AnalysisResult(BaseModel):
     criteria_scores: list[CriterionResult]
     summary: str
 
-# Initialize analyzer (loads models once at startup)
 print("Loading analyzer models...")
 analyzer = TranscriptAnalyzer()
 print("Server ready!")
@@ -74,19 +73,19 @@ async def analyze_file(
 ):
     """Analyze transcript from uploaded .txt file"""
     
-    # Validate file type
+    #validate file type
     if not file.filename.endswith('.txt'):
         raise HTTPException(status_code=400, detail="Only .txt files are supported")
     
     try:
-        # Read file content
+        #read file content
         content = await file.read()
         transcript = content.decode('utf-8')
         
         if len(transcript.strip()) < 10:
             raise HTTPException(status_code=400, detail="Transcript too short (minimum 10 characters)")
         
-        # Analyze
+        #analyze
         result = analyzer.analyze(transcript, duration_seconds)
         return result
         

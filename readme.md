@@ -2,12 +2,6 @@
 
 AI-powered tool to analyze and score student self-introduction transcripts using NLP and semantic similarity.
 
-## 🔗 Live Demo
-
-- **Frontend**: [https://your-app.vercel.app](https://your-app.vercel.app)
-- **Backend API**: [https://comm-analyzer-api.onrender.com](https://comm-analyzer-api.onrender.com)
-- **API Documentation**: [https://comm-analyzer-api.onrender.com/docs](https://comm-analyzer-api.onrender.com/docs)
-
 ## 📊 Scoring System
 
 The tool evaluates transcripts across 5 criteria with weighted scoring (0-100):
@@ -42,18 +36,18 @@ The tool evaluates transcripts across 5 criteria with weighted scoring (0-100):
 
 **3. Language & Grammar (20 points)**
 - **Grammar (10pts)**: Based on error rate per 100 words
-  - ≤1 error: 10pts | ≤2: 8pts | ≤4: 6pts | ≤7: 4pts | >7: 2pts
+  - <= 1 error: 10pts | <= 2: 8pts | <= 4: 6pts | <= 7: 4pts | > 7: 2pts
   - Uses LanguageTool for detailed grammar checking
 - **Vocabulary (10pts)**: TTR = unique words / total words
-  - ≥0.9: 10pts | ≥0.7: 8pts | ≥0.5: 6pts | ≥0.3: 4pts
+  - >= 0.9: 10pts | >= 0.7: 8pts | >= 0.5: 6pts | >= 0.3: 4pts
 
 **4. Clarity (15 points)**
 - Filler word rate = (filler count / total words) × 100
-- ≤3%: 15pts | ≤6%: 12pts | ≤9%: 9pts | ≤12%: 6pts | >12%: 3pts
+- <= 3 %: 15pts | <= 6 %: 12pts | <= 9 %: 9pts | <= 12 %: 6pts | > 12 %: 3pts
 
 **5. Engagement (15 points)**
 - VADER sentiment analysis (positivity score)
-- ≥0.9: 15pts | ≥0.7: 12pts | ≥0.5: 9pts | ≥0.3: 6pts
+- >= 0.9: 15pts | >= 0.7: 12pts | >= 0.5: 9pts | >= 0.3: 6pts
 
 ## 🛠️ Technology Stack
 
@@ -68,7 +62,7 @@ The tool evaluates transcripts across 5 criteria with weighted scoring (0-100):
 ### Frontend
 - **Framework**: React 18 + Vite 5
 - **HTTP Client**: Axios
-- **Styling**: Custom CSS (light theme)
+- **Styling**: Custom CSS 
 
 ## ✨ Features
 
@@ -117,7 +111,7 @@ cd backend
 
 # Create virtual environment
 python -m venv myenv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source myenv/bin/activate  # Windows: myenv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -173,7 +167,7 @@ Analyze transcript from JSON input
       "feedback": "Salutation type: Good",
       "details": {"type_found": "Good"}
     }
-    // ... more criteria
+    // more criterion present
   ],
   "summary": "Excellent introduction! Clear structure..."
 }
@@ -268,31 +262,6 @@ VADER (Valence Aware Dictionary and sEntiment Reasoner):
 - **Deployed**: 5-10 seconds (cold start), 2-3 seconds (warm)
 - **Model Loading**: First startup takes 3-5 minutes
 - **Subsequent Runs**: 10-30 seconds
-
-## 🐛 Troubleshooting
-
-### LanguageTool Error
-If you see "No java install detected":
-```bash
-# Install Java 11+
-# Windows (Chocolatey): choco install openjdk11
-# Mac (Homebrew): brew install openjdk@11
-# Linux: sudo apt install openjdk-11-jdk
-```
-
-### Model Download Issues
-```python
-# Manual download
-from sentence_transformers import SentenceTransformer
-model = SentenceTransformer('all-MiniLM-L6-v2')
-```
-
-### Port Already in Use
-```bash
-# Find and kill process
-# Mac/Linux: lsof -ti:8000 | xargs kill -9
-# Windows: netstat -ano | findstr :8000
-```
 
 ## 📦 Dependencies
 

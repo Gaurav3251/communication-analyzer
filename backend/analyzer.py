@@ -6,7 +6,6 @@ from sentence_transformers import SentenceTransformer, util
 import language_tool_python
 from collections import Counter
 
-# Download required NLTK data
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
@@ -28,7 +27,7 @@ class TranscriptAnalyzer:
     def analyze(self, transcript: str, duration_sec: int = None):
         text = transcript.strip()
         
-        # NLTK Tokenization
+        #NLTK Tokenization
         sentences = sent_tokenize(text)
         words = word_tokenize(text.lower())
         word_count = len([w for w in words if w.isalnum()])
@@ -38,7 +37,7 @@ class TranscriptAnalyzer:
         
         criteria_results = []
         
-        # 1. CONTENT & STRUCTURE (40%)
+        #1. CONTENT & STRUCTURE (40%)
         sal_result = self._score_salutation(text)
         criteria_results.append(sal_result)
         
@@ -48,23 +47,23 @@ class TranscriptAnalyzer:
         flow_result = self._score_flow(text)
         criteria_results.append(flow_result)
         
-        # 2. SPEECH RATE (10%)
+        #2. SPEECH RATE (10%)
         wpm = (word_count / duration_sec) * 60
         sr_result = self._score_speech_rate(wpm, duration_sec)
         criteria_results.append(sr_result)
         
-        # 3. LANGUAGE & GRAMMAR (20%)
+        #3. LANGUAGE & GRAMMAR (20%)
         gram_result = self._score_grammar_languagetool(text, word_count)
         criteria_results.append(gram_result)
         
         ttr_result = self._score_vocabulary(words)
         criteria_results.append(ttr_result)
         
-        # 4. CLARITY (15%)
+        #4. CLARITY (15%)
         filler_result = self._score_filler_words(text, word_count)
         criteria_results.append(filler_result)
         
-        # 5. ENGAGEMENT (15%)
+        #5. ENGAGEMENT (15%)
         sent_result = self._score_sentiment(text)
         criteria_results.append(sent_result)
         
@@ -109,7 +108,6 @@ class TranscriptAnalyzer:
         """Enhanced keyword detection using semantic similarity"""
         text_lower = text.lower()
         
-        # Rule-based keyword check (fast)
         must_have_keywords = {
             "name": ["name", "myself", "i am", "i'm"],
             "age": ["age", "years old", "year old"],
@@ -127,15 +125,12 @@ class TranscriptAnalyzer:
         must_score = 0
         must_found = []
         
-        # Check must-have keywords
         for category, keywords in must_have_keywords.items():
             if any(kw in text_lower for kw in keywords):
                 must_score += 4
                 must_found.append(category)
         
-        # Semantic similarity check for missing categories
         if len(must_found) < 5:
-            # Use semantic similarity to find implicit mentions
             embedding = self.model.encode(text, convert_to_tensor=True)
             
             for category in ["name", "age", "school", "family", "hobbies"]:
@@ -144,13 +139,12 @@ class TranscriptAnalyzer:
                     query_emb = self.model.encode(query, convert_to_tensor=True)
                     similarity = util.cos_sim(embedding, query_emb).item()
                     
-                    if similarity > 0.3:  # Threshold for semantic match
-                        must_score += 2  # Partial credit
+                    if similarity > 0.3:  #threshold for semantic match
+                        must_score += 2  
                         must_found.append(f"{category}(semantic)")
         
         must_score = min(must_score, 20)
         
-        # Check good-to-have
         good_score = 0
         good_found = []
         for category, keywords in good_to_have.items():
@@ -220,11 +214,10 @@ class TranscriptAnalyzer:
         try:
             matches = self.grammar_tool.check(text)
             
-            # Filter for actual errors (exclude stylistic suggestions)
-            # Check available attributes and filter accordingly
+            #chk available attributes and filter accordingly
             errors = []
             for m in matches:
-                # Try different attribute names for error classification
+                #tried diff attribute names for error classif
                 issue_type = None
                 if hasattr(m, 'ruleIssueType'):
                     issue_type = m.ruleIssueType
@@ -233,20 +226,18 @@ class TranscriptAnalyzer:
                 elif hasattr(m, 'rule'):
                     issue_type = getattr(m.rule, 'category', None)
                 
-                # Include all matches if we can't determine type, or filter for important ones
                 if issue_type is None or issue_type.lower() in ['grammar', 'misspelling', 'typographical', 'possible_typo', 'grammar_error']:
                     errors.append(m)
             
-            # If no filtering worked, use all matches but cap at reasonable number
             if not errors:
-                errors = matches[:10]  # Cap at 10 to avoid over-penalization
+                errors = matches[:10] 
             
             error_count = len(errors)
             
-            # Calculate error rate per 100 words
+            #calc error rate per 100 words
             error_rate = (error_count / max(word_count / 100, 1))
             
-            # Score based on errors per 100 words
+            #score based on errors per 100 words
             if error_rate <= 1: score = 10
             elif error_rate <= 2: score = 8
             elif error_rate <= 4: score = 6
@@ -268,7 +259,7 @@ class TranscriptAnalyzer:
                 }
             }
         except Exception as e:
-            # Fallback to basic grammar check if LanguageTool fails
+            #fallback to basic grammar check if LanguageTool fails
             print(f"LanguageTool error: {e}")
             return self._score_grammar_basic(text, word_count)
     

@@ -1,5 +1,3 @@
-# Rubric definitions based on the case study Excel file
-
 RUBRIC = {
     "content_structure": {
         "weight": 40,
@@ -89,7 +87,6 @@ RUBRIC = {
     }
 }
 
-# Expected output for sample transcript (for validation)
 SAMPLE_EXPECTED = {
     "transcript": "Hello everyone, myself Muskan, studying in class 8th B section from Christ Public School...",
     "word_count": 131,
