@@ -124,8 +124,8 @@ uvicorn main:app --reload --port 8000
 ```
 
 **Note**: First run downloads:
-- sentence-transformers model (~90MB) - 1-2 minutes
-- LanguageTool resources (~200MB) - 2-3 minutes
+- sentence-transformers model (approx. 90MB) - 1-2 minutes
+- LanguageTool resources (approx. 200MB) - 2-3 minutes
 
 ### Frontend Setup
 
@@ -194,19 +194,6 @@ Health check endpoint
 - Speech Rate: 151 WPM (Ideal)
 - Key Strengths: Clear structure, good keyword coverage, positive sentiment
 - Areas for Improvement: Minor grammar refinements
-
-## 🌐 Deployment
-
-### Backend → Render.com
-- Root Directory: `backend`
-- Build: `pip install -r requirements.txt`
-- Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- Free tier (sleeps after 15min inactivity)
-
-### Frontend → Vercel
-- Root Directory: `frontend`
-- Build: `npm run build`
-- Environment: `VITE_API_URL=<backend-url>`
 
 ## 📝 Usage
 
